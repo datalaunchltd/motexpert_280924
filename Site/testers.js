@@ -982,14 +982,14 @@ class Testers {
         let fistIteration = true
         for (const key in headers) {
             if (fistIteration) {
-                html += `<li class="nav-item data-launch-tabs-parent-li-testers active" id="testers_parent_li_${headers[key].meta.name}">
-                            <a class="nav-link data-launch-tabs-clickable-testers active" data-launch-menu-item="${headers[key].meta.name}" href="#">${key}</a>
+                html += `<li class="nav-item data-launch-tabs-parent-li-testers active modern-nav-item" id="testers_parent_li_${headers[key].meta.name}">
+                            <a class="nav-link data-launch-tabs-clickable-testers active modern-nav-link" data-launch-menu-item="${headers[key].meta.name}" href="#">${key}</a>
                         </li>` 
                 fistIteration = false
             }
             else {
-            html +=     `<li class="nav-item data-launch-tabs-parent-li-testers" id="testers_parent_li_${headers[key].meta.name}">
-                            <a class="nav-link data-launch-tabs-clickable-testers" data-launch-menu-item="${headers[key].meta.name}" href="#">${key}</a>
+            html +=     `<li class="nav-item data-launch-tabs-parent-li-testers modern-nav-item" id="testers_parent_li_${headers[key].meta.name}">
+                            <a class="nav-link data-launch-tabs-clickable-testers modern-nav-link" data-launch-menu-item="${headers[key].meta.name}" href="#">${key}</a>
                         </li>`   
             }                   
         }
@@ -1326,14 +1326,14 @@ class Testers {
                                     <h3 class="modern-record-subtitle">Tester ID - ${rec.id} </h3><span style='display:none' id='currentRecordID'>${rec.id}</span>                    
                                 </div>
                                 <div class='data-launch-tabs-container'>
-                                    <nav class="navbar navbar-expand-lg navbar-light">
+                                    <nav class="navbar navbar-expand-lg navbar-light modern-navbar">
                                         <div class="container-fluid data-launch-form-tabs-container">
                                             <div class="data-launch-form-tabs-container-row">
                                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                                     <span class="navbar-toggler-icon"></span>
                                                 </button>
                                                 <div class="collapse navbar-collapse" id="navbarNav">
-                                                    <ul class="navbar-nav">
+                                                    <ul class="navbar-nav modern-navbar-nav">
                                                     ${this.buildFormMenu()}
                                                     </ul>
                                                 </div>
