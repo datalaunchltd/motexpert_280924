@@ -7,9 +7,12 @@ class Testers {
         this.filteredData = []
         this.filters = []
         this.garageData = garageData
+        this.testerNotesData = []
+        this.testersTrainingFiles = []
         // this.generateDummyData()
         this.selectedGarageId = null;
         this.setupModal();
+        document.getElementById('data-launch-side-bar').classList.remove('data-launch-activate-menu')
         if (id) {
             this.id = id
             this.addListeners()
@@ -250,6 +253,192 @@ class Testers {
         this.selectedGarageName = row.getAttribute('data-garage-name')
         console.log('the garage selected (selectedGarageId) is ', this.selectedGarageId)
     }
+    showTesterTrainingRecordsModal() {
+        this.testersTrainingFiles = []
+        document.getElementById(`testersTrainingTableBody_${this.id}`).innerHTML = ''
+        document.getElementById('testerTrainingRecordModal').style.display = 'block';
+        
+        // Reset fields
+        document.getElementById('trainingSubject').value = '';
+        document.getElementById('date').value = '';
+        document.getElementById('duration').value = '';
+        document.getElementById('trainingTopics').value = '';
+        document.getElementById('testerTrainingRecordId').value = '';
+    }
+    showTesterTrainingRecordsDetails(id) {
+        this.testersTrainingFiles = []
+        document.getElementById(`testersTrainingTableBody_${this.id}`).innerHTML = ''
+        document.getElementById('testerTrainingRecordModal').style.display = 'block';
+        let record;        
+        for (let i = 0; i < this.testerTrainingRecordsData.length; i++) {
+            if (this.testerTrainingRecordsData[i].id === parseInt(id)) {
+                record = this.testerTrainingRecordsData[i];
+                break;
+            }
+        }
+        document.getElementById('trainingSubject').value = record.training_subject || '';
+        document.getElementById('date').value = record.date.split('T')[0] || '';
+        document.getElementById('duration').value = record.duration || '';
+        document.getElementById('trainingTopics').value = record.training_topics || '';
+        document.getElementById('testerTrainingRecordId').value = record.id || '';
+        fetchData('data_launch_images', 100, 0, null, null, this.id, parseInt(record.id)).then(
+            res => {
+                console.log('data_launch_images res', res)
+                let imageData = res
+                this.testersTrainingFiles = res
+                let html = ''
+                for (let i = 0; i < imageData.length; i++) {
+                    html += `
+                        <tr id='tester_training_files_row_${i}'>
+                            <td id='tester_training_files_row_${i}_name'>${imageData[i].name}</td>
+                            <td id='tester_training_files_row_${i}_type'>${imageData[i].type}</td>
+                            `
+                    if (imageData[i].type === 'application/pdf') {
+                        html += `<td id='tester_training_files_row_${i}_cdnUrl'><a target="_blank" href="${imageData[i].cdnUrl}"><i class="bi bi-file-earmark-pdf-fill"></i></a></td>`
+                    }
+                    else if (imageData[i].type === 'application/msword') {
+                        html += `<td id='tester_training_files_row_${i}_cdnUrl'><a target="_blank" href="${imageData[i].cdnUrl}"><i class="bi bi-file-earmark-word-fill"></i></a></td>`
+                    }
+                    else {
+                        html += `<td id='tester_training_files_row_${i}_cdnUrl'><a target="_blank" href="${imageData[i].cdnUrl}"><img style='height: 50px; width: 50px;' src="${imageData[i].cdnUrl}"></a></td>`
+                    }
+                    html += `
+                            <td><i class="bi bi-trash data-launch-subgrid-delete-tester-training-document-item" data-row-id='${i}' data-id='${imageData[i].id}'></i></td>  
+                        </tr>
+                    `            
+                }
+                document.getElementById(`testersTrainingTableBody_${this.id}`).innerHTML = html
+            },
+            err => {
+                console.log('error', err)
+            }
+        )
+    }
+
+    saveNewTesterTrainingRecordsRecord() {
+        // Gathering data from the modal form
+        const trainingSubject = document.getElementById('trainingSubject').value;
+        const date = document.getElementById('date').value;
+        const duration = document.getElementById('duration').value;
+        const trainingTopics = document.getElementById('trainingTopics').value;
+        const testerTrainingRecordId = document.getElementById('testerTrainingRecordId').value;
+
+   
+        // Creating the object to send to the server
+        const testerTrainingRecordsData = {
+            tester_id: this.id,
+            training_subject: trainingSubject,
+            date: date,
+            duration: duration,
+            training_topics: trainingTopics,
+            created_by_name: user_FIRST_NAME + ' ' + user_LAST_NAME,
+            user_id: user_ID
+        };
+    
+        // Debugging
+        console.log('testerTrainingRecordsData', testerTrainingRecordsData);
+        console.log('testerTrainingRecordId', testerTrainingRecordId);
+    
+        if (testerTrainingRecordId === "") {
+            // Sending the data to the server to create a new record
+            createRecord('data_launch_tester_training_records', testerTrainingRecordsData).then(res => {
+                for (let i = 0; i < this.testersTrainingFiles.length; i++) {
+                    this.testersTrainingFiles[i].tester_id = this.id
+                    this.testersTrainingFiles[i].record_id = res.id
+                    this.testersTrainingFiles[i].record_type = 'tester_training_images'
+                    console.log('heres what im trying to send to data_launch_images ' , this.testersTrainingFiles[i])
+                    createRecord('data_launch_images', this.testersTrainingFiles[i]).then(result =>{
+                        console.log('successfully created data launch images result', result)
+                    }, err => {
+                        console.error(err)
+                    })                  
+                }               
+                console.log('data_launch_tester_training_records res', res);
+                this.injectDataIntoTesterTrainingRecordsSubgrid();
+            }, err => { 
+                console.error(err); 
+            });
+        } else {
+            // Updating the existing record
+            let recordId = parseInt(testerTrainingRecordId);
+            testerTrainingRecordsData.id = recordId;
+            updateRecord('data_launch_tester_training_records', recordId, testerTrainingRecordsData).then(res => {
+                console.log('data_launch_tester_training_records res', res);
+                for (let i = 0; i < this.testersTrainingFiles.length; i++) {
+                    this.testersTrainingFiles[i].tester_id = this.id
+                    this.testersTrainingFiles[i].record_id = res.id
+                    this.testersTrainingFiles[i].record_type = 'tester_training_images'
+                    console.log('heres what im trying to send to data_launch_images ' , this.testersTrainingFiles[i])
+                    createRecord('data_launch_images', this.testersTrainingFiles[i]).then(result =>{
+                        console.log('successfully created data launch images result', result)
+                    }, err => {
+                        console.error(err)
+                    })                  
+                }
+                for (let i = 0; i < this.testerTrainingRecordsData.length; i++) {
+                    if (this.testerTrainingRecordsData[i].id === recordId) {
+                        this.testerTrainingRecordsData[i] = res;
+                    }        
+                }
+                this.injectDataIntoTesterTrainingRecordsSubgrid();
+            }, err => { 
+                console.error(err); 
+            });
+        }
+
+    }
+    
+    closeTheSimpleImageUploadWindow (files) {
+        document.getElementById('simple-file-upload-window').classList.remove('active')
+        document.getElementById('data-launch-simple-image-upload-close-button').classList.remove('active')        
+        // document.getElementById('simple-file-upload-window').innerHTML = `<input id="uploader-preview-here-1335" class="simple-file-upload" type="hidden" data-template="frosty" data-maxFileSize="50">`
+        console.log('files for the image upload', files)
+        
+        files.forEach(file => {
+            let match = false
+            for (let i = 0; i < this.testersTrainingFiles.length; i++) {
+                if (this.testersTrainingFiles[i].cdnUrl === file.cdnUrl) {
+                    match = true
+                }
+            }
+            if (match === false) {
+                this.testersTrainingFiles.push(file)
+            }        
+        })
+        let html = ''
+        for (let i = 0; i < this.testersTrainingFiles.length; i++) {
+            html += `
+                <tr id='tester_training_files_row_${i}'>
+                    <td id='tester_training_files_row_${i}_name'>${this.testersTrainingFiles[i].name}</td>
+                    <td id='tester_training_files_row_${i}_type'>${this.testersTrainingFiles[i].type}</td>
+                    `
+            if (this.testersTrainingFiles[i].type === 'application/pdf') {
+                html += `<td id='tester_training_files_row_${i}_cdnUrl'><a target="_blank" href="${this.testersTrainingFiles[i].cdnUrl}"><i class="bi bi-file-earmark-pdf-fill"></i></a></td>`
+            }
+            else if (this.testersTrainingFiles[i].type === 'application/msword') {
+                html += `<td id='tester_training_files_row_${i}_cdnUrl'><a target="_blank" href="${this.testersTrainingFiles[i].cdnUrl}"><i class="bi bi-file-earmark-word-fill"></i></a></td>`
+            }
+            else {
+                html += `<td id='tester_training_files_row_${i}_cdnUrl'><a target="_blank" href="${this.testersTrainingFiles[i].cdnUrl}"><img style='height: 50px; width: 50px;' src="${this.testersTrainingFiles[i].cdnUrl}"></a></td>`
+            }
+            html += `
+                    <td><i class="bi bi-trash data-launch-subgrid-delete-tester-training-document-item" data-row='${i}' data-id='${this.testersTrainingFiles[i].id}'></i></td>  
+                </tr>
+            `            
+        }
+        document.getElementById(`testersTrainingTableBody_${this.id}`).innerHTML = html
+    }
+    deleteTrainingDocumentImage (id, rowId) {
+        console.log('here to delete the note record ', id)
+        deleteRecord('data_launch_images', parseInt(id)).then(res => {
+            console.log('succesfully deleted image ? ', res)
+            document.getElementById(`tester_training_files_row_${rowId}`).style.display = 'none'
+            this.testersTrainingFiles = this.testersTrainingFiles.filter(file => file.id !== id);
+        },
+        error => {
+            console.error(error)
+        })
+    }
     addListeners () {
         console.log('adding event listeners to testers class')
         document.getElementById('testerRecordsPage').addEventListener('click', (event) => {
@@ -262,42 +451,66 @@ class Testers {
                 this.currentRecordId = id
                 this.openForm(true, id)
             }
+            else if (event.target.classList.contains('data-launch-upload-testers-training-document')) {
+                document.getElementById('simple-file-upload-window').classList.add('active')                
+                document.getElementById('data-launch-simple-image-upload-close-button').classList.add('active')
+                if (this.testersTrainingFiles.length !== 0) {
+                    document.getElementById('fileListwidget0').innerHTML = "Click Here To Add More Files"
+                    document.getElementById('fileListwidget0').classList.add('btn')
+                    document.getElementById('fileListwidget0').classList.add('btn-primary')
+                    document.getElementById('fileListwidget0').classList.add('data-launch-simple-file-upload-button')
+                }
+                else {
+                    document.getElementById('simple-file-upload-button-widget0').innerHTML = "Click Here To Add File(s)"
+                    document.getElementById('simple-file-upload-button-widget0').classList.add('data-launch-simple-file-upload-button') 
+                }
+            }
+            else if (event.target.classList.contains('data-launch-subgrid-delete-tester-training-document-item')) {
+                let id = event.target.attributes["data-id"].value
+                let rowId = event.target.attributes["data-row-id"].value
+                this.deleteTrainingDocumentImage(id, rowId)
+            }
+            else if (event.target.classList.contains('data-launch-simple-image-upload-close-button')) {
+                document.getElementById('simple-file-upload-window').classList.remove('active')
+                document.getElementById('data-launch-simple-image-upload-close-button').classList.remove('active')
+            }
+            else if (event.target.classList.contains('tester-training-record-close')) {
+                document.getElementById('testerTrainingRecordModal').style.display = 'none'
+            }
+            else if (event.target.classList.contains('data-launch-save-tester-training-record-btn')) {
+                document.getElementById('testerTrainingRecordModal').style.display = 'none'
+                this.saveNewTesterTrainingRecordsRecord()
+            }            
+            else if (event.target.classList.contains('data-launch-create-new-training-record')) {
+                this.showTesterTrainingRecordsModal()
+            }
+            else if (event.target.classList.contains('data-launch-table-clickable-tester-training-record')) {
+                let id = event.target.attributes["data-id"].value
+                this.showTesterTrainingRecordsDetails(id)
+            }
+            else if (event.target.classList.contains('data-launch-table-clickable-tester-note-row')) {
+                let id = event.target.attributes["data-id"].value
+                this.openNotesModalWithDetails(id)
+            }            
+            else if (event.target.classList.contains('data-launch-subgrid-delete-tester-training-record-item')) {
+                let id = event.target.attributes["data-id"].value
+                deleteRecord('data_launch_tester_training_records', parseInt(id))
+                document.getElementById(`testerTrainingRecords_${this.id}_${id}`).style.display = 'none'
+            }
             else if (event.target.classList.contains('data-launch-add-new-tester-record')) {
                 this.openForm(false)
             }
             else if (event.target.classList.contains('data-launch-testers-note-close-button')) {
                 this.closeNotesModal()
             }
+            
             else if (event.target.classList.contains('data-launch-subgrid-delete-note-item')) {
                 let id = event.target.attributes["data-note-id"].value
                 this.deleteNoteRecord(id)
             }
             else if (event.target.classList.contains('data-launch-save-testers-note')) {
                 console.log('data-launch-notes-modal-box-popup save button clicked')
-                let subject = document.getElementById(`note_subject_${this.id}`).value
-                let note = document.getElementById(`note_body_${this.id}`).value
-                console.log('the subject is ', subject)
-                console.log('the actual note is ', note)
-                let object = {date: this.getFormattedDateTime(), note_subject: subject, note_body: note, note_table: 'testers', tester_record_id: this.id}
-                createRecord('data_launch_notes', object).then(res => {
-                    console.log(' data note added ? ', res)
-                    let newHTMLNoteRow = `<tr id='tester_notes_${this.id}_${res.id}'>
-                                            <td>${object.date}</td>
-                                            <td>${object.note_subject}</td> 
-                                            <td>${object.note_body}</td>
-                                            <td>
-                                                <i class="bi bi-trash data-launch-subgrid-delete-note-item" data-note-id='${res.id}'></i>
-                                            </td>     
-                                        </tr>`
-                    document.getElementById(`tester_notes_table_body_${this.id}`).innerHTML += newHTMLNoteRow
-                    document.getElementById(`note_body_${this.id}`).value = ''
-                    document.getElementById(`note_subject_${this.id}`).value = ''
-                    this.closeNotesModal()
-                },
-                    error => {
-                    console.log('something went wrong', error)
-                    this.closeNotesModal()
-                })
+                this.saveTestersNote()
             }
             else if (event.target.classList.contains('data-launch-create-new-note-record')) {
                 let testerID = event.target.attributes["data-launch-tester-id"].value
@@ -738,7 +951,8 @@ class Testers {
             Garages: {
                         meta: {
                             columns: 1,
-                            name: 'garages'
+                            name: 'garages',
+                            type: 'full'
                         },
                         fields: [
                             {
@@ -746,6 +960,19 @@ class Testers {
                                 column: 1
                             }
                         ]
+           },
+           Training: {
+                meta: {
+                    columns: 1,
+                    name: 'training',
+                    type: 'full'
+                },
+                fields: [
+                    {
+                        type: 'trainingRecordsSubgrid',
+                        column: 1
+                    }
+                ]
            }
         }
     }
@@ -784,12 +1011,16 @@ class Testers {
                 console.log('columns ', columns)
                 let colIndex = 0
                 for (let i = 0; i < columns; i++) {
-                    if (i === 0) {
-                        html += `<div class='col-lg-4 col-md-6 col-sm-12 col-xs-12 data-launch-field-container'>` 
+                    if (fieldDataObj[key].meta.type === 'full') {
+                        html += `<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 data-launch-field-container'>` 
+                    }
+                    /// this else if is so the notes subgrid takes us more space than just a 1/3 of the page
+                    else if (fieldDataObj[key].meta.name === 'summary' && i === 1) {
+                        html += `<div class='col-lg-8 col-md-6 col-sm-12 col-xs-12 data-launch-field-container'>` 
                     }
                     else {
-                        html += `<div class='col-lg-8 col-md-6 col-sm-12 col-xs-12 data-launch-field-container'>` 
-                    }                
+                        html += `<div class='col-lg-4 col-md-6 col-sm-12 col-xs-12 data-launch-field-container'>` 
+                    }                 
                     colIndex = i + 1
                     for (let t = 0; t < fieldDataObj[key].fields.length; t++) {
                         if (fieldDataObj[key].fields[t].column === colIndex) {
@@ -809,6 +1040,7 @@ class Testers {
                                 html += ` <div class='data-launch-input-field-container'>
                                             <label class="data-launch-field-labels">${fieldDataObj[key].fields[t].label}</label>
                                             <input id="${fieldDataObj[key].fields[t].field}_val" placeholder='${fieldDataObj[key].fields[t].label}' type='email' value="${rec[fieldDataObj[key].fields[t].field]}" data-launch-field="${rec[fieldDataObj[key].fields[t].field]}" class='data-launch-input-field data-launch-field-editable'>
+                                            <a style='position: relative; top: -34%; left: 95%;' href="mailto:${typeof rec[fieldDataObj[key].fields[t].field] === 'undefined' ? '' : rec[fieldDataObj[key].fields[t].field]}"><i class="bi bi-envelope"></i></a>
                                         </div>`
                             }
                             else if (fieldDataObj[key].fields[t].type === 'date') {
@@ -835,7 +1067,7 @@ class Testers {
                                             style="height: 60vh;overflow-y: auto;overflow-x: hidden;"
                                             id='data_launch_testers_notes_table_${this.id}'>
                                             </div>
-                                            <button class="data-launch-create-new-note-record modern-button" data-launch-tester-id='${this.id}'>
+                                            <button class="data-launch-create-new-note-record" data-launch-tester-id='${this.id}'>
                                                 <i class="bi bi-plus-circle"></i> Add New Note
                                             </button>
                                         </div>`
@@ -868,6 +1100,14 @@ class Testers {
                             }
                             else if (fieldDataObj[key].fields[t].type === 'TestersGaragesSubgrid') {
                                 html += `<div id='data-launch-testers-associated-garages-cont' class='data-launch-subgrid-container data-launch-input-field-container-multi-line'></div>`
+                            }
+                            else if (fieldDataObj[key].fields[t].type === 'trainingRecordsSubgrid') {
+                                html += `<div id='data-launch-training-records-subgrid-cont' class='data-launch-subgrid-container data-launch-input-field-container-multi-line'>
+                                         </div>
+                                         <button class="data-launch-create-new-training-record" data-launch-garage-id='${this.id}'>
+                                                <i class="bi bi-plus-circle"></i> Add New Training Record
+                                        </button>
+                                         `
                             }                            
                             else if (fieldDataObj[key].fields[t].type === 'googleMaps') {
                                 let googleMapsString = ''
@@ -982,7 +1222,9 @@ class Testers {
         return html
     }
     openForm = (bool, id) => {
+        currentPage = 'Testers'
         let rec;
+        document.getElementById('data-launch-side-bar').classList.remove('data-launch-activate-menu')
         if (bool) {
             for (let i = 0; i < this.data.length; i++) {
                 if (this.data[i].id === parseInt(id)) {
@@ -1014,15 +1256,59 @@ class Testers {
             else if (rec.vtsPostcode) {
                 googleMapsString += `$20${rec.vtsPostcode}`
             }
-            html = `
-            <i class="bi bi-plus data-launch-nav-menu-plus-icon" id="data-launch-nav-menu-plus-icon"></i>
+            // <i class="bi bi-plus data-launch-nav-menu-plus-icon" id="data-launch-nav-menu-plus-icon"></i>
+            html = `            
             <div class='container-fluid'>
                             <div class='row'>
+                               <div class="data-launch-simple-file-upload-window" id="simple-file-upload-window2">
+                                <input id="uploader-preview-here-13352" data-multiple="true" class="simple-file-upload" type="hidden" data-template="frosty" data-maxFileSize="50">
+                            </div>
+                            <span id='data-launch-simple-image-upload-close-button' class='data-launch-simple-image-upload-close-button'><i class="bi bi-x-circle data-launch-simple-image-upload-close-button active"></i></span>
+                            <div id="testerTrainingRecordModal" style='display: none' class="tester-training-record-modal-popup">
+                                <div class="tester-training-record-modal-content">
+                                    <span class="tester-training-record-close">&times;</span>
+                                    <h2>Tester Training Record</h2>
+                                    <span style='display: none'><input id="testerTrainingRecordId" type="text" value=""></span>
+                                    
+                                    <!-- Log Details -->
+                                    <div id="logDetailsSection" class="tab-content active">
+                                        <label for="trainingSubject">Training Subject:</label>
+                                        <input type="text" id="trainingSubject" name="trainingSubject">
+
+                                        <label for="date">Date:</label>
+                                        <input type="date" id="date" name="date">
+
+                                        <label for="testersTrainingDocumentUpload">Document Upload</label>
+                                        <button class='data-launch-upload-testers-training-document'>Upload</button>
+                                        <table class="table table-hover" id="testersTrainingTable_${this.id}">
+                                            <thead>
+                                                <tr>
+                                                    <th style='width: 30%'>Name</th>
+                                                    <th style='width: 30%'>Type</th>
+                                                    <th style='width: 30%'>Preview</th>
+                                                    <th style='width: 10%'></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="testersTrainingTableBody_${this.id}"></tbody>
+                                        </table>
+                                        
+                                        <label for="duration">Duration:</label>
+                                        <input type="text" id="duration" name="duration">
+
+                                        <label for="trainingTopics">Details of Training Topics Covered:</label>
+                                        <textarea id="trainingTopics" name="trainingTopics"></textarea>                                        
+                                    </div>
+
+                                    <button class='data-launch-save-tester-training-record-btn' id="saveTesterTrainingRecordButton">Save</button>
+                                </div>
+                            </div>
+
                                 <div style='display: none' class='data-launch-notes-modal-box-popup-cont' id='data-launch-notes-modal-box-popup'>
                                     <div class="modal-overlay">
                                         <div class="modal-content modern-modal">
                                             <button class='data-launch-testers-note-close-button modern-close-button'>X</button>
                                             <h2 class="modern-modal-title">Add New Note</h2>
+                                            <span style='display:none' id="note_id_${this.id}"></span>
                                             <label for="noteSubject" class="modern-modal-label">Subject:</label>
                                             <input type="text" id="note_subject_${this.id}" name="noteSubject" placeholder="Enter subject..." class="modern-modal-input">
                                             <label for="noteBody" class="modern-modal-label">Note:</label>
@@ -1035,9 +1321,9 @@ class Testers {
                                 </div>
                                 <div style='display: none' class='data-launch-confirmation-box-inject' id='data-launch-confirmation-box-inject'></div>
                                 <button type="button" id="data-launch-testing-station-save-close" class="btn btn-outline-primary data-launch-save-close-record">Save & Close</button>
-                                <div class='data-launch-record-header'>
-                                    <h3>${rec.first_name} ${rec.last_name}</h3>
-                                    <h3>Tester ID - ${rec.id} </h3><span style='display:none' id='currentRecordID'>${rec.id}</span>                    
+                                <div class='data-launch-record-header modern-record-header'>
+                                    <h3 class="modern-record-title">${rec.first_name} ${rec.last_name}</h3>
+                                    <h3 class="modern-record-subtitle">Tester ID - ${rec.id} </h3><span style='display:none' id='currentRecordID'>${rec.id}</span>                    
                                 </div>
                                 <div class='data-launch-tabs-container'>
                                     <nav class="navbar navbar-expand-lg navbar-light">
@@ -1063,8 +1349,8 @@ class Testers {
         }
         else {
             this.newRecord = true
-            html = `
-            <i class="bi bi-plus data-launch-nav-menu-plus-icon" id="data-launch-nav-menu-plus-icon"></i>
+            // <i class="bi bi-plus data-launch-nav-menu-plus-icon" id="data-launch-nav-menu-plus-icon"></i>
+            html = `            
             <div class='container-fluid'>
                             <div class='row'>
                                 <div style='display: none' class='data-launch-confirmation-box-inject' id='data-launch-confirmation-box-inject'></div>
@@ -1095,8 +1381,24 @@ class Testers {
                 `
         }
         document.getElementById('testerRecordsPage').innerHTML = html
+
+       runThisTest()
+
+
+
+        // let testerTrainingDocumentUpload = document.getElementById('uploader-preview-here-1335')
+        // // Safely remove the event listener, even if it doesn't exist yet
+        // testerTrainingDocumentUpload.removeEventListener('fileUploadSuccess', this.handleFileUploadSuccess);
+        // // Add the new event listener
+        // testerTrainingDocumentUpload.addEventListener('fileUploadSuccess', this.handleFileUploadSuccess);
         this.injectDataIntoTheSubgrid()
         this.injectNotesIntoSubgrid()
+        this.injectDataIntoTesterTrainingRecordsSubgrid()
+    }
+    handleFileUploadSuccess(event) {
+        alert('file upload success');
+        console.log(this.value); // The URL of the uploaded file
+        console.log(event.detail.files); // Array of file details
     }
     export = () => {
 
@@ -1139,6 +1441,13 @@ class Testers {
         });
         
     }
+    injectDataIntoTesterTrainingRecordsSubgrid () {  
+        fetchData('data_launch_tester_training_records', 100, 0, null, null, this.id).then(data => {
+            console.log('data_launch_tester_training_records garage_id 5:', data);
+            this.testerTrainingRecordsData = data
+            new SubGrid(data, 'data-launch-training-records-subgrid-cont', 'testerTrainingRecords', this.id);
+        });     
+    }
     injectNotesIntoSubgrid () {
         fetchData('data_launch_notes', 2000).then(res => {
             let reducedArrayForTesterRecordID = []
@@ -1147,6 +1456,7 @@ class Testers {
                     reducedArrayForTesterRecordID.push(res[i])
                 }                    
             }
+            this.testerNotesData = reducedArrayForTesterRecordID
             new SubGrid(reducedArrayForTesterRecordID, `data_launch_testers_notes_table_${this.id}`, 'tester_notes', this.id)
         },
         err => {
@@ -1178,12 +1488,100 @@ class Testers {
             }
         );        
     }
-    
+    getFormattedDate(date) {
+        if (date) {
+            const now = new Date(date);
+        
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            const year = now.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        else {
+          return ''
+        }
+    }    
     openNotesModal () {
         document.getElementById('data-launch-notes-modal-box-popup').style.display = 'block'
     }
+    openNotesModalWithDetails (id) {
+        console.log('openNotes')
+        let record;
+        for (let i = 0; i < this.testerNotesData.length; i++) {
+            if (parseInt(this.testerNotesData[i].id) === parseInt(id)) { 
+                record = this.testerNotesData[i]
+            }            
+        }
+        document.getElementById(`note_subject_${this.id}`).value = record.note_subject
+        document.getElementById(`note_body_${this.id}`).value = record.note_body
+        document.getElementById(`note_id_${this.id}`).value = record.id
+        document.getElementById('data-launch-notes-modal-box-popup').style.display = 'block'
+    }
     closeNotesModal () {
+        document.getElementById(`note_subject_${this.id}`).value = ''
+        document.getElementById(`note_body_${this.id}`).value = ''
         document.getElementById('data-launch-notes-modal-box-popup').style.display = 'none'
+    }
+    saveTestersNote() {
+        let subject = document.getElementById(`note_subject_${this.id}`).value
+        let note = document.getElementById(`note_body_${this.id}`).value
+        // let date = document.getElementById(`note_date_${this.id}`).value
+        console.log('the actual note is ', note)
+        let object = {
+            create_date: this.getFormattedDateTime(),
+            note_subject: subject,
+            note_body: note,
+            note_table: 'testers',
+            tester_record_id: this.id,
+            user_id: user_ID,
+            created_by_name: user_FIRST_NAME + ' ' + user_LAST_NAME
+        }
+        let id = document.getElementById(`note_id_${this.id}`).value
+        if (id) {
+            updateRecord('data_launch_notes', parseInt(id), object).then(res => {
+                console.log(' data note added ? ', res)
+                for (let i = 0; i < this.testerNotesData.length; i++) {
+                    if (this.testerNotesData[i].id === res.id) {
+                        this.testerNotesData[i] = res;
+                    }        
+                } 
+                document.getElementById(`note_body_${this.id}`).value = ''
+                document.getElementById(`note_subject_${this.id}`).value = ''
+                document.getElementById(`note_id_${this.id}`).value = ''
+                this.closeNotesModal()
+                this.injectNotesIntoSubgrid()
+            },
+                error => {
+                console.log('something went wrong', error)
+                this.closeNotesModal()
+            })
+        }
+        else {
+            createRecord('data_launch_notes', object).then(res => {
+                console.log(' data note added ? ', res)
+                this.testerNotesData.push(res)
+                // let newHTMLNoteRow = `<tr id='tester_notes_${this.id}_${res.id}'>
+                //                         <td data-id="${res.id}" class="data-launch-table-clickable-tester-note-row">${object.create_date}</td>
+                //                         <td data-id="${res.id}" class="data-launch-table-clickable-tester-note-row">${object.created_by_name}</td>  
+                //                         <td data-id="${res.id}" class="data-launch-table-clickable-tester-note-row">${object.note_subject}</td> 
+                //                         <td data-id="${res.id}" class="data-launch-table-clickable-tester-note-row">${object.note_body}</td>
+                //                         <td>
+                //                             <i class="bi bi-trash data-launch-subgrid-delete-note-item" data-note-id='${res.id}'></i>
+                //                         </td>     
+                //                     </tr>`
+                // document.getElementById(`tester_notes_table_body_${this.id}`).innerHTML += newHTMLNoteRow
+                document.getElementById(`note_body_${this.id}`).value = ''
+                document.getElementById(`note_subject_${this.id}`).value = ''
+                document.getElementById(`note_id_${this.id}`).value = ''
+                this.closeNotesModal()
+                this.injectNotesIntoSubgrid()
+            },
+                error => {
+                console.log('something went wrong', error)
+                this.closeNotesModal()
+            })
+        }        
+        
     }
     deleteNoteRecord (id) {
         console.log('here to delete the note record ', id)
@@ -1207,4 +1605,51 @@ class Testers {
     
         return `${day}/${month}/${year} - ${hours}:${minutes}`;
     }
+    getFormattedDate(date) {
+        if (date) {
+            const now = new Date(date);
+        
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            const year = now.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        else {
+          return ''
+        }
+    }
 }
+
+
+ // Object to store event listeners for reuse
+ let eventListeners = [];
+
+ // Function to add an event listener and store it
+ function addEventListenerWithTracking(element, event, handler) {
+     element.addEventListener(event, handler);
+     eventListeners.push({ element: element, event: event, handler: handler });
+ }
+
+ // Function to clone event listeners to a new element
+ function cloneEventListeners(sourceElement, targetElement) {
+     eventListeners.forEach(listener => {
+         if (listener.element === sourceElement) {
+             targetElement.addEventListener(listener.event, listener.handler);
+         }
+     });
+ }
+
+ function runThisTest(){
+    // Example usage
+    let originalElement = document.getElementById('simple-file-upload-window');
+    let newElement = document.getElementById('simple-file-upload-window2');
+   
+    // Add an event listener to the original element
+    addEventListenerWithTracking(originalElement, 'click', function() {
+        console.log('Original element clicked');
+    });
+   
+    // Clone event listeners to the new element
+    cloneEventListeners(originalElement, newElement);
+   }
+

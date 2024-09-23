@@ -6,6 +6,7 @@ class MOTReconciliation {
         this.redValues = []
         this.bookingReport = []
         this.renderPage()
+        document.getElementById('data-launch-side-bar').classList.remove('data-launch-activate-menu')
         this.addListeners()
     }
     runQuery () {

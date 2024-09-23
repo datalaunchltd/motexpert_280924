@@ -7,7 +7,11 @@ let class_invoked_motReconciliation = false;
 let testingStationData = null;
 let garageClassInstantiated;
 let testingStationClassInstantiated;
-let testersClassInstantiated
+let testersClassInstantiated;
+let currentPage;
+let user_ID;
+let user_FIRST_NAME;
+let user_LAST_NAME;
 
 // Function to decode encoded strings
 function decodeVTS(encodedString) {
@@ -21,12 +25,11 @@ function decodeVTS(encodedString) {
     return encodedString;
 }
 
- 
 
 function changePage(event, id, urlRedirectToPage) {
     if (event) {
         event.stopPropagation();
-    }  
+    }
     let desiredPage = '';
     if (urlRedirectToPage) {
         desiredPage = urlRedirectToPage
@@ -37,6 +40,14 @@ function changePage(event, id, urlRedirectToPage) {
             desiredPage = event.target.getAttribute('data-launch-menu-item');
             }
         });
+    }
+    if (desiredPage === 'Home') {
+      if (!document.body.classList.contains('data-launch-home-page-image')) {
+        document.body.classList.add('data-launch-home-page-image')
+      }      
+    }
+    else {
+      document.body.classList.remove('data-launch-home-page-image')
     }
     let x = Array.from(document.getElementsByClassName('data-launch-main-screen'));
     x.forEach(el => {
@@ -165,12 +176,19 @@ function closeMenu() {
   document.getElementById('data-launch-side-bar').classList.remove('data-launch-activate-menu');
 }
 
+function logout() {
+  window.location.href = "/index.html"
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // Example usage of create, update, and fetch functions
+    const path = window.location.pathname;
+    const page = path.split("/").pop();
+    console.log(page); // This will log the filename of the current page (e.g., "login.html", "index.html")
     const updatedData = {
       liam_test: 'yoyo'
     };
-    
+        
     // Creating a new record
     // createRecord('testing_station', { liam_test: 'initial value' })
     //   .then(() => fetchData('testing_station', 10, 0)) // Fetch 10 records starting from offset 0
@@ -180,29 +198,72 @@ document.addEventListener("DOMContentLoaded", () => {
     // updateRecord('testing_station', 1, updatedData)
     //   .then(() => fetchData('testing_station', 10, 0)) // Fetch 10 records starting from offset 0
     //   .catch(error => console.error('Error updating record:', error));
-
-    fetchData('testing_station', 1000, 0, 0).then(
-      function success(res) {
-        console.log('testing_station res', res);
-        testingStationData = res;
-        document.getElementById('data-launch-toggle-menu-button').style.display = 'flex'
-      }
-    );
-    
-    fetchData('garage_records', 100).then(
-        function success (res) {
-            console.log('garage_records res', res)
-            garageData = res
+    if (page === 'index.html') {
+      console.log('its only the login page, no need to fetch the data')
+    }
+    else {
+      fetchData('testing_station', 100, 0, 0).then(
+        function success(res) {
+          console.log('testing_station res', res);
+          testingStationData = res;
+          document.getElementById('data-launch-toggle-menu-button').style.display = 'flex'
         }
-    )
-    fetchData('tester_records', 100).then(
-      function success (res) {
-          console.log('tester_records res', res)
-          testersData = res
-      }
-    )
+      );
+      
+      fetchData('garage_records', 5).then(
+          function success (res) {
+              console.log('garage_records res', res)
+              garageData = res
+              document.getElementById('data-launch-toggle-menu-button').style.display = 'flex'
+          }
+      )
+      fetchData('tester_records', 3).then(
+        function success (res) {
+            console.log('tester_records res', res)
+            testersData = res
+        }
+      )
+        // Usage example
+      getMaxId('testing_station').then(maxId => {
+        console.log('The largest ID in the table:', maxId);
+        testing_station_next_id = maxId + 1;
+        console.log('The next id will be', testing_station_next_id);
+      });
+
+      getMaxId('tester_records').then(maxId => {
+        console.log('The largest ID in the table:', maxId);
+        tester_record_next_id = maxId + 1;
+        console.log('The next id will be', tester_record_next_id);
+      });
+      
+      getMaxId('garage_records').then(maxId => {
+        console.log('The largest ID in the table:', maxId);
+        garage_record_next_id = maxId + 1;
+        console.log('The next id will be', garage_record_next_id);
+      });
+      // Retrieve the cookie values
+      user_FIRST_NAME = getCookie('first_name');
+      user_LAST_NAME = getCookie('last_name');
+      user_ID = getCookie('user_id');
+
+      document.getElementById('data_launch_logged_in_as_banner').innerHTML = `Logged in as : ${user_FIRST_NAME} ${user_LAST_NAME}`
+      console.log('First Name:', user_FIRST_NAME);
+      console.log('Last Name:', user_LAST_NAME);
+      console.log('The User ID is ',  user_ID);
+    }
   });
-  
+
+  // Function to get a specific cookie by name
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
+
+
+
   // Function to update a record
   async function updateRecord(table, id, updatedData) {
     try {
@@ -220,30 +281,42 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         const result = await response.json();
         console.log('Record updated successfully:', result);
+        return result
       }
     } catch (error) {
       console.error(error.message);
     }
   }
   
-  async function fetchData(table, limit = 50, offset = 0, id = null) {
+  async function fetchData(table, limit = 50, offset = 0, id = null, garageId = null, testerId = null, imagesAssociatedRecordId = null, username = null, password = null) {
     try {
-      let url = `/api/${table}/data?limit=${limit}&offset=${offset}`;
-      if (id) {
-        url = `/api/${table}/data?id=${id}&limit=${limit}&offset=${offset}`; // Include limit and offset
-      }
-  
-      const response = await fetch(url);
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(`Error fetching data: ${error.message}`);
-      }
-      const data = await response.json();
-      return data;
+        let url = `/api/${table}/data?limit=${limit}&offset=${offset}`;
+        if (id) {
+            url += `&id=${id}`;
+        }
+        if (garageId) {
+            url += `&garage_id=${garageId}`;
+        }
+        if (testerId) {
+            url += `&tester_id=${testerId}`
+        }
+        if (imagesAssociatedRecordId) {
+            url += `&record_id=${imagesAssociatedRecordId}`
+        }
+        if (username && password) {
+            url += `&username=${username}&password=${password}`
+        }
+        const response = await fetch(url);
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(`Error fetching data: ${error.message}`);
+        }
+        const data = await response.json();
+        return data;
     } catch (error) {
-      console.error(error.message);
+        console.error(error.message);
     }
-  }
+}
   
 
   async function countRows(table) {
@@ -286,52 +359,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  // Usage example
-  getMaxId('testing_station').then(maxId => {
-    console.log('The largest ID in the table:', maxId);
-    testing_station_next_id = maxId + 1;
-    console.log('The next id will be', testing_station_next_id);
-  });
-
-  getMaxId('tester_records').then(maxId => {
-    console.log('The largest ID in the table:', maxId);
-    tester_record_next_id = maxId + 1;
-    console.log('The next id will be', tester_record_next_id);
-  });
-  
-  getMaxId('garage_records').then(maxId => {
-    console.log('The largest ID in the table:', maxId);
-    garage_record_next_id = maxId + 1;
-    console.log('The next id will be', garage_record_next_id);
-  });
-  
-  
-  
-// Function to create a new record
 async function createRecord(table, recordData) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch(`/api/${table}/data`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(recordData)
-        });
-        
-        if (!response.ok) {
-          const error = await response.json();
-          reject(new Error(`Error creating record: ${error.message}`));
-        } else {
-          const result = await response.json();
-          resolve(result);
-        }
-      } catch (error) {
-        reject(new Error(`Error creating record: ${error.message}`));
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await fetch(`/api/${table}/data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(recordData)
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();  // Attempt to parse the error response
+        reject(new Error(`Error creating record: ${error.message || response.statusText}`));  // Use the detailed error message if available
+      } else {
+        const result = await response.json();
+        resolve(result);
       }
-    });
-  }
-  
+    } catch (error) {
+      reject(new Error(`Error creating record: ${error.message}`));
+    }
+  });
+}
+
+
   // Function to delete a record
   async function deleteRecord(table, id) {
     try {
@@ -350,8 +402,6 @@ async function createRecord(table, recordData) {
       console.error(error.message);
     }
   }
-
-
 
   // Example: Load content based on a URL parameter or user action
 document.addEventListener("DOMContentLoaded", () => {
@@ -377,59 +427,30 @@ document.addEventListener("DOMContentLoaded", () => {
     // loadContent(section);
 });
 
-  // // Usage example:
-  // // Assuming there's a div with id="subgrid-container" in your HTML
-  // const data = ['Item 1', 'Item 2', 'Item 3'];
-  // const subGrid = new SubGrid(data, 'subgridTest');
-  
+let imageValues = []
 
-//   function uploadImage() {
-//     var formData = new FormData();
-//     var imageFile = document.getElementById("imageFile").files[0];
-    
-//     if (!imageFile) {
-//         alert("Please select an image to upload.");
-//         return;
-//     }
+let elll = document.getElementById('uploader-preview-here-1335')
 
-//     formData.append("imageFile", imageFile);
+elll.addEventListener("fileUploadSuccess", function (e) {
+  console.log('file upload data this ', this)
+  console.log(this.value) // The url of the uploaded file
+  console.log(e.detail.files) // Array of file details 
+  imageValues.push(this.value)
+  this.value = '';  // Clears the input value
+  console.log('currentPage is ', currentPage)
+  if (currentPage === 'Testers') {
+    testersClassInstantiated.closeTheSimpleImageUploadWindow(e.detail.files)
+  }
+  else if (currentPage === 'Garages') {
+    garageClassInstantiated.closeTheSimpleImageUploadWindow(e.detail.files)
+  }
+})
 
-//     fetch('/api/upload-image', {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.id) {
-//             alert("Image uploaded successfully with ID: " + data.id);
-//         } else {
-//             alert("Image upload failed: " + data.error);
-//         }
-//     })
-//     .catch(error => console.error('Error:', error));
-// }
-
-
-// function fetchImage(imageId) {
-//   // Replace imageId with the ID you want to fetch
-//   imageId = imageId || prompt("Enter the image ID to fetch:");
-
-//   fetch(`/api/datalaunchimages/image/${imageId}`)
-//   .then(response => {
-//       if (response.ok) {
-//           return response.blob(); // Convert the response to a blob (binary large object)
-//       } else {
-//           throw new Error("Image not found");
-//       }
-//   })
-//   .then(blob => {
-//       const imgElement = document.getElementById('displayedImage');
-//       const objectURL = URL.createObjectURL(blob);
-//       imgElement.src = objectURL;
-//       imgElement.style.display = 'block'; // Make the image visible
-//   })
-//   .catch(error => {
-//       console.error('Error fetching the image:', error);
-//       alert(error.message);
-//   });
-// }
+document.body.addEventListener('click', event => {
+  console.log('event', event)
+  if (event.target.classList.contains('data-launch-simple-file-upload-button')) {
+    console.log('clicked data launch simple file upload button dz-preview dz-image-preview dz-processing dz-success dz-complete')
+    let elements = document.querySelectorAll('.dz-preview.dz-image-preview.dz-processing.dz-success.dz-complete');
+    elements.forEach(el => {el.style.display = 'none'})
+  } 
+})

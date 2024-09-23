@@ -1,5 +1,5 @@
 .data-launch-top-navbar {
-    height: 50px;
+    height: 48px;
     width: 100vw;
     background-color: #0068B5;
     display: block;
@@ -13,7 +13,7 @@ body {
 }
 .data-launch-main-screen {
     height: 100vh;
-    background-color: #E8F4FA;
+    /* background-color: #f8f9fa; */
     position: relative;
     top: 50px;
     overflow-y: hidden;
@@ -534,19 +534,25 @@ body {
   }
 }
 
+
+
 /* Close Button */
 .tester-record-associated-garages-close {
-  color: #bbb;
+  color: #aaa;
   float: right;
-  font-size: 28px;
+  font-size: 60px;
   font-weight: bold;
   cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
 }
 
 .tester-record-associated-garages-close:hover,
 .tester-record-associated-garages-close:focus {
   color: #000;
   text-decoration: none;
+  cursor: pointer;
 }
 
 /* Header */
@@ -604,7 +610,7 @@ body {
   padding: 12px;
   font-size: 18px;
   color: white;
-  background-color: #28a745;
+  background-color: #1abc9c;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -644,12 +650,20 @@ textarea {
 }
 .data-launch-garages-screen {
   display: none;
+  position: relative;
+  top: 200px;
+  left: 8px;
+  width: 100%;  
 }
 .data-launch-garages-screen.active {
   display: flex;
 }
 .data-launch-testers-screen {
   display: none;
+  position: relative;
+  top: 105px;
+  left: 8px;
+  width: 100%;
 }
 .data-launch-testers-screen.active {
   display: flex;
@@ -798,8 +812,8 @@ textarea {
   gap: 15px;
   background-color: #ffffff;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* border-radius: 8px; */
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
 }
 
 /* Input Field Container */
@@ -934,7 +948,7 @@ textarea {
 
 /* Save Button */
 .modern-save-button {
-  background-color: #007bff;
+  background-color: #1abc9c;
   color: #fff;
   padding: 10px 20px;
   border: none;
@@ -947,21 +961,7 @@ textarea {
   background-color: #0056b3;
 }
 
-/* Modern Button Style */
-.modern-button {
-  background-color: #007bff;
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
+
 
 .modern-button:hover {
   background-color: #0056b3;
@@ -1043,10 +1043,15 @@ textarea {
 .modern-record-header {
   background-color: #f8f9fa;
   padding: 5px 15px;
-  border-radius: 8px;
+  border-radius: 0px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   margin-bottom: 5px;
+  width: 100vw;
+  position: fixed;
+  top: 49px;
+  display: block;
+  left: 0px;
 }
 
 /* Main Title */
@@ -1101,8 +1106,8 @@ textarea {
 /* Modern Navbar */
 .modern-navbar {
   background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+  width: 100vw;
 }
 
 /* Navbar Container */
@@ -1177,7 +1182,7 @@ textarea {
 .modern-button {
   background-color: #007bff;
   color: white;
-  padding: 15px 131px;
+  padding-left: 27%;
   border: none;
   font-size: 18px;
   font-weight: 600;
@@ -1187,8 +1192,8 @@ textarea {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-  height: 49px;
-  width: 500px;
+  height: 48px;
+  width: 400px;
 }
 
 .modern-button:hover {
@@ -1206,6 +1211,1544 @@ textarea {
   line-height: 1;
 }
 
+/* Modal Container */
+.mot-calibration-modal-popup {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.mot-calibration-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 500px;
+  background-color: #ffffff;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 60%;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.5s ease;
+}
+
+.data-launch-mot-equipment-modal-overlay {
+  padding-left: 35%;
+}
+.data-launch-mot-equipment-modal-content {
+  width: 100%;
+}
+
+
+/* Close Button */
+.mot-calibration-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.mot-calibration-close:hover,
+.mot-calibration-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Input and Label Styles */
+.mot-calibration-modal-content label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.mot-calibration-modal-content input[type="text"],
+.mot-calibration-modal-content input[type="date"],
+.mot-calibration-modal-content textarea,
+.mot-calibration-modal-content input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Save Button */
+.mot-calibration-modal-content button {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.mot-calibration-modal-content button:hover {
+  background-color: #45a049;
+}
+#mot_image_container {
+  margin-top: 10px;
+  text-align: center;
+}
+
+#mot_image_preview {
+  max-width: 100%;
+  max-height: 200px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  display: none; /* Initially hidden, will display when an image is present */
+}
 
 
 
+/* Modal Container */
+.mot-site-audit-modal-popup {
+  display: none; /* Hidden by default */
+  position: fixed; 
+  z-index: 1000; /* Sits on top */
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.mot-site-audit-modal-content {
+  background-color: #ffffff;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 60%;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.5s ease;
+}
+
+
+
+/* Close Button */
+.mot-site-audit-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.mot-site-audit-close:hover,
+.mot-site-audit-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #f1f1f1;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  background-color: #f1f1f1;
+  color: #555;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 16px;
+  border-radius: 10px 10px 0 0;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+.tab-button.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Form Labels and Inputs */
+.mot-site-audit-modal-content label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.mot-site-audit-modal-content input[type="text"],
+.mot-site-audit-modal-content input[type="date"],
+.mot-site-audit-modal-content select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.mot-site-audit-modal-content input[type="text"]:focus,
+.mot-site-audit-modal-content input[type="date"]:focus,
+.mot-site-audit-modal-content select:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Save Button */
+#saveMotSiteAuditButton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#saveMotSiteAuditButton:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive Modal */
+@media screen and (max-width: 768px) {
+  .mot-site-audit-modal-content {
+      width: 90%;
+  }
+
+  .tab-button {
+      font-size: 14px;
+      padding: 8px 15px;
+  }
+
+  #saveMotSiteAuditButton {
+      font-size: 14px;
+      padding: 8px 15px;
+  }
+}
+
+
+.qc-checker-modal-popup {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.qc-checker-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.5s ease;
+  position: fixed;
+  left: 10%;
+  top: 26px;
+}
+
+
+.qc-checker-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.qc-checker-close:hover,
+.qc-checker-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #f1f1f1;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  background-color: #f1f1f1;
+  color: #555;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 16px;
+  border-radius: 10px 10px 0 0;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+.tab-button.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+button {
+  background-color: #f39c12;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+/* Modal container */
+.booking-modal-popup {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal content box */
+.booking-modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Close button */
+.data-launch-garage-modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.data-launch-garage-modal-close:hover,
+.data-launch-garage-modal-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* Modal header */
+.booking-modal-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Tab buttons */
+.tabs {
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.tab-button {
+  background-color: #f1f1f1;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: 0.3s;
+  float: left;
+}
+
+.tab-button.active {
+  background-color: #ccc;
+  border-bottom: 2px solid #007bff;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+/* Tab content */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Form labels and inputs */
+.booking-modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.booking-modal-content input[type="text"],
+.booking-modal-content input[type="date"],
+.booking-modal-content input[type="time"],
+.booking-modal-content input[type="email"],
+.booking-modal-content select,
+.booking-modal-content textarea {
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Checkbox styling */
+.booking-modal-content input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Save button */
+.data-launch-save-garage-bookings-btn {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.data-launch-save-garage-bookings-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Modal container */
+.defect-report-modal-popup {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal content box */
+.defect-report-modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+
+/* Close button */
+.defect-report-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.defect-report-close:hover,
+.defect-report-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Close button */
+.garage-booking-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.garage-booking-close:hover,
+.garage-booking-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal header */
+.defect-report-modal-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Tab buttons */
+.tabs {
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.tab-button {
+  background-color: #f1f1f1;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: 0.3s;
+  float: left;
+}
+
+.tab-button.active {
+  background-color: #ccc;
+  border-bottom: 2px solid #007bff;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+/* Tab content */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Form labels and inputs */
+.defect-report-modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.defect-report-modal-content input[type="text"],
+.defect-report-modal-content input[type="date"],
+.defect-report-modal-content textarea,
+.defect-report-modal-content input[type="checkbox"] {
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Checkbox styling */
+.defect-report-modal-content input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Save button */
+.data-launch-save-defect-report-btn {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.data-launch-save-defect-report-btn:hover {
+  background-color: #0056b3;
+}
+
+
+/* Modal container */
+.mot-bay-cleaning-log-modal-popup {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal content box */
+.mot-bay-cleaning-log-modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+
+
+/* Close button */
+.mot-bay-cleaning-log-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.mot-bay-cleaning-log-close:hover,
+.mot-bay-cleaning-log-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal header */
+.mot-bay-cleaning-log-modal-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Form labels and inputs */
+.mot-bay-cleaning-log-modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.mot-bay-cleaning-log-modal-content input[type="text"],
+.mot-bay-cleaning-log-modal-content input[type="date"],
+.mot-bay-cleaning-log-modal-content textarea {
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Save button */
+.data-launch-save-mot-bay-cleaning-log-btn {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.data-launch-save-mot-bay-cleaning-log-btn:hover {
+  background-color: #0056b3;
+}
+
+
+/* Modal container */
+.tester-training-record-modal-popup {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal content box */
+.tester-training-record-modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Close button */
+
+
+.tester-training-record-close {
+  color: #aaa;
+  float: right;
+  font-size: 64px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  right: 17px;
+  top: -50px;
+}
+
+.tester-training-record-close:hover,
+.tester-training-record-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal header */
+.tester-training-record-modal-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Form labels and inputs */
+.tester-training-record-modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.tester-training-record-modal-content input[type="text"],
+.tester-training-record-modal-content input[type="date"],
+.tester-training-record-modal-content textarea {
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Save button */
+.data-launch-save-tester-training-record-btn {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+}
+.data-launch-save-site-audit-btn {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+}
+.data-launch-save-qc-checkers-btn {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+}
+
+
+.data-launch-save-tester-training-record-btn:hover {
+  background-color: #0056b3;
+}
+
+
+/* Modal container */
+.qc-checker-for-bike-modal-popup {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal content box */
+.qc-checker-for-bike-modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+
+
+
+/* Close button */
+.qc-checker-for-bike-close {
+  color: #aaa;
+  float: right;
+  font-size: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: -26px;
+}
+
+.qc-checker-for-bike-close:hover,
+.qc-checker-for-bike-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* Modal header */
+.qc-checker-for-bike-modal-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Form labels and inputs */
+.qc-checker-for-bike-modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.qc-checker-for-bike-modal-content input[type="text"],
+.qc-checker-for-bike-modal-content input[type="date"],
+.qc-checker-for-bike-modal-content input[type="checkbox"],
+.qc-checker-for-bike-modal-content textarea {
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Section headers */
+.section-header {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Save button */
+.data-launch-save-qc-checkers-for-bike-btn {
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.data-launch-save-qc-checkers-for-bike-btn:hover {
+  background-color: #0056b3;
+}
+
+
+/* Tab container */
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  top: 17px;
+  left: -1px;
+  border-bottom: 0px;
+}
+
+/* Tab buttons */
+.tab-button {
+  background-color: #f1f1f1;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: background-color 0.3s;
+  font-size: 17px;
+  border-radius: 4px 4px 0 0;
+  margin-right: 5px;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+.tab-button.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+/* Tab content */
+.tab-content {
+  display: none;
+  animation: fadeEffect 0.5s; /* Fade in tabs */
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+/* General Sidebar Styling */
+.modern-sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Close Button */
+.close-button-modern {
+  font-size: 1.5rem;
+  color: #ecf0f1;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.close-button-modern:hover {
+  color: #e74c3c;
+}
+
+
+/* General Sidebar Styling */
+.modern-sidebar {
+  width: 250px;
+  background-color: #0068B5; /* Darker blue for the sidebar */
+  color: #ffffff;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Close Button */
+.close-button-modern {
+  font-size: 1.5rem;
+  color: #ffffff;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: color 0.3s ease;
+}
+
+.close-button-modern:hover {
+  color: #ff6b6b; /* Soft red for hover */
+}
+
+/* Menu Styling */
+.modern-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: 26px;
+}
+
+.modern-menu-item {
+  margin-bottom: 1.2rem;
+}
+
+/* Link Styling */
+.modern-menu-link {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.modern-menu-link:hover {
+  background-color: #244a7e; /* Slightly lighter blue for hover */
+  padding-left: 20px;
+}
+
+/* Icons */
+.modern-icon {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+.modern-menu-link:hover .modern-icon {
+  color: #1abc9c; /* Teal for icon hover */
+}
+
+/* Text */
+.modern-menu-text {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .modern-sidebar {
+      width: 200px;
+  }
+  .modern-menu-text {
+      display: none;
+  }
+}
+
+
+
+
+
+
+
+/* //////// */
+/* this is the css for the homepage */
+
+
+
+/* General Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 250px;
+  background-color: #1e3a63; /* Matches with your sidebar's blue theme */
+  color: white;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.2rem;
+  padding: 10px;
+  display: block;
+  transition: background-color 0.3s;
+}
+
+.sidebar ul li a:hover {
+  background-color: #244a7e;
+  padding-left: 20px;
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+  background-color: #f0f4f8;
+  width: 100%;
+  padding: 0px;
+}
+
+.logo-container {
+  margin-bottom: 20px;
+}
+
+.logo {
+  max-width: 280px;
+  border-radius: 8px;
+}
+
+.welcome-message h1 {
+  color: #1e3a63; /* Matches the sidebar for cohesion */
+}
+
+.welcome-message p {
+  font-size: 14px;
+  color: #555;
+  margin-top: 30px;
+}
+
+/* Navigation Buttons */
+.navigation-links {
+  margin-top: 30px;
+}
+
+.nav-btn {
+  display: inline-block;
+  background-color: #1e3a63; /* Blue color from the logo */
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.nav-btn:hover {
+  background-color: #1abc9c; /* Teal hover for a modern effect */
+}
+
+
+
+
+
+.data-launch-associate-new-garage-record {
+  width: 100%;
+}
+.data-launch-save-testers-note {
+  width: 100%;
+}
+.data-launch-create-new-note-record {
+  width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ///////// / css to jazz up the navbar within testing station
+
+/* Navbar Container */
+.modern-navbar-nav {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #0068B5; /* Your Navbar Blue */
+  border-radius: 8px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar Items */
+.modern-nav-item {
+  margin-right: 15px;
+}
+
+/* Navbar Links */
+.modern-nav-link {
+  text-decoration: none;
+  color: white;
+  padding: 10px 15px;
+  font-weight: bold;
+  transition: background-color 0.3s, padding-left 0.3s, box-shadow 0.3s;
+  border-radius: 5px;
+  display: block;
+}
+
+/* Hover Effect */
+.modern-nav-link:hover {
+  background-color: #4ea3d1; /* Lighter shade of blue for hover */
+  color: white;
+  padding-left: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Active Link Styling */
+.modern-nav-item.active .modern-nav-link {
+  background-color: #005a99; /* Slightly darker shade of blue */
+  color: white;
+  border-bottom: 3px solid #4ea3d1; /* Indicator for active item */
+}
+
+/* Active Hover Effect */
+.modern-nav-item.active .modern-nav-link:hover {
+  background-color: #004b80; /* Even darker active hover */
+  padding-left: 25px;
+}
+
+/* Background for the entire page */
+body {
+  background-color: #f8f9fa; /* Light grayish-blue for a soft contrast */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+
+
+.data-launch-tabs-container {
+  position: fixed;
+    top: 118px;
+    width: 101vw;
+    left: 0px;
+    padding-left: 0px;
+}
+
+
+
+
+
+/* Form Container Styling */
+.obscure-form-container-2931 {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.obscure-form-container-2931 input {
+  margin-bottom: 15px;
+}
+
+/* Upload and Fetch Buttons */
+.obscure-upload-btn-3839, .obscure-fetch-btn-8392 {
+  padding: 10px;
+  background-color: #0068B5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.obscure-upload-btn-3839:hover, .obscure-fetch-btn-8392:hover {
+  background-color: #005a99;
+}
+
+/* Image Container Styling */
+.obscure-image-container-7293 {
+  margin-top: 20px;
+}
+
+/* Image Styling */
+.obscure-fetched-image-5371 {
+  max-width: 300px;
+  height: auto;
+  display: none;
+}
+
+.obscure-img-hidden-0011 {
+  display: none;
+}
+
+/* Error Message */
+.obscure-error-msg-1627 {
+  color: red;
+  display: none;
+}
+
+
+.data-launch-simple-file-upload-window {
+  position: fixed;
+  top: 22%;
+  left: 40%;
+  background-color: #674f94;
+  border-radius: 3.5px;
+  height: 220px;
+  width: 250px;
+  padding-top: 50px;
+  display: none;
+}
+.data-launch-simple-file-upload-window.active{
+  z-index: 99999;
+  display: block;
+}
+.data-launch-simple-image-upload-close-button {
+  color: white;
+  display: none;
+  position: fixed;
+  top: 22%;
+  left: 52%;
+  font-size: 20px;
+  cursor: pointer;
+}
+.data-launch-simple-image-upload-close-button.active {
+  display: block;
+  z-index: 99999
+}
+.data-launch-simple-image-upload-close-button-garages {
+  color: white;
+  display: none;
+  position: fixed;
+  top: 22%;
+  left: 52%;
+  font-size: 20px;
+  cursor: pointer;
+}
+.data-launch-simple-image-upload-close-button-garages.active {
+  display: block;
+  z-index: 99999
+}
+
+.data-launch-simple-file-upload-button {
+  width: 100%;
+  height: 100%;
+  letter-spacing: 3px;
+  color: white !important;
+}
+
+.data-launch-logout-button {
+  position: fixed;
+  top: 2px;
+  right: 2px;
+}
+
+
+
+
+/* ///// snazz up home page? */
+
+
+
+/* Wrapper for the entire layout */
+.data-launch-homepage-snazz-up-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  position: relative;
+  padding-top: 23vh;
+}
+
+/* Semi-transparent overlay */
+.data-launch-homepage-snazz-up-overlay {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 23px;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+/* Center content */
+.data-launch-homepage-snazz-up-content {
+  text-align: center;
+}
+
+/* Logo with a subtle overlay */
+.data-launch-homepage-snazz-up-logo {
+  width: 150px;
+  opacity: 0.8; /* Tone down the boldness */
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.data-launch-homepage-snazz-up-logo:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Classy title */
+.data-launch-homepage-snazz-up-title {
+  font-family: 'Georgia', serif;
+  font-size: 2.5rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4); /* Adding a soft shadow for depth */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.data-launch-home-page-image {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), url(porsche2.jpg) center / cover no-repeat;
+}
+
+th {
+  user-select: none;
+  cursor: default;
+}
+
+.data-launch-logged-in-as-banner {
+  float: right;
+  position: relative;
+  right: 180px;
+  color: white;
+  top: -6px;
+}

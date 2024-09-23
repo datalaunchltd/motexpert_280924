@@ -93,7 +93,6 @@ button:hover {
 <body>
     <div class="login-container">
         <h1>Login</h1>
-        <form>
             <div class="input-group">
                 <input type="text" id="username" required>
                 <label for="username">Username</label>
@@ -103,12 +102,8 @@ button:hover {
                 <label for="password">Password</label>
             </div>
             <button type="submit" onclick="login()">Login</button>
-        </form>
     </div>
-    <script>
-        function login () {
-            location.replace("./home.html")
-        }
-    </script>
+    <script src="./script.js"></script>
+    <script src="./login.js"></script>
 </body>
 </html>

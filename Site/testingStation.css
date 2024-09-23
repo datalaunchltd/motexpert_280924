@@ -67,6 +67,11 @@
 }
 .data-launch-testing-stations-screen {
     display: none;
+    position: relative;
+    top: 139px;
+    left: 8px;
+    width: 100%;
+    border-radius: 0px;
 }
 .active {
     display: flex;
@@ -74,6 +79,8 @@
 .data-launch-form-tabs-container {
     color: white;
     background-color: #0068B5;
+    border-radius: 6px;
+    width: 97%;
 }
 .data-launch-form-tabs-container-row {
     margin-left: -5px;
@@ -151,8 +158,8 @@
     bottom: 10px;
     width: 80%;
     left: 10%;
-    background-color:#F7D569;
-    color: #004785;
+    background-color: #1abc9c;
+    color: #ffffff;
     opacity: 1;
     z-index: 999;
     font-size: 24px;
