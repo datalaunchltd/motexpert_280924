@@ -1070,7 +1070,6 @@ class TestingStation {
             createRecord('testing_station', createRecordObject).then( res => {
                     console.log('CREATED NEW TESTING STATION IN DB', res)
                     testing_station_next_id++
-                    this.addNewTableRowToListView(res)
                     this.data.splice(0,0, res)
                     this.renderHTMLHeader()
                 },
@@ -1103,23 +1102,6 @@ class TestingStation {
                 }
             )
         }   
-    }
-    addNewTableRowToListView (rec) {
-        console.log('addNewTableRowToListView rec', rec)
-        let html = `
-            <tr class="responsive-table__row export-row" data-export-row="${this.exportRow}" data-export-header="VTS Site No" data-export-val="${rec.vts_site_number}" data-vts-pro-id="${rec.id}">
-                <td class="responsive-table__body__text responsive-table__body__text--types export-record data-launch-testing-station-view-record-click" data-export-row="${this.exportRow}" data-export-header="ID" data-export-val="${rec.id}" scope="row">${rec.id}</td>
-                <td class="responsive-table__body__text responsive-table__body__text--types export-record data-launch-testing-station-view-record-click" data-export-row="${this.exportRow}" data-export-header="VTS Site Number" data-export-val="${rec.vts_site_number}" scope="row">${rec.vts_site_number}</td>
-                <td class="responsive-table__body__text responsive-table__body__text--name export-record data-launch-testing-station-view-record-click" data-export-row="${this.exportRow}" data-export-header="Trading Name" data-export-val="${typeof rec.trading_name === 'undefined' ? '' : rec.trading_name}" scope="row">
-                ${rec.trading_name.substring(0, 16)}
-				</td>
-                <td class="responsive-table__body__text responsive-table__body__text--types export-record data-launch-testing-station-view-record-click" data-export-row="${this.exportRow}" data-export-header="Contact Main No"                data-export-val="${rec.contact_main_number}" scope="row">${typeof rec.contact_main_number === 'undefined' ? '' : rec.contact_main_number}</td>
-                <td class="responsive-table__body__text responsive-table__body__text--types export-record data-launch-testing-station-view-record-click" data-export-row="${this.exportRow}" data-export-header="VTS City"                data-export-val="${rec.vts_address_line_4}" scope="row">${typeof rec.vts_address_line_4 === 'undefined' ? '' : rec.vts_address_line_4}</td>
-                <td class="responsive-table__body__text responsive-table__body__text--types export-record data-launch-testing-station-view-record-click" data-export-row="${this.exportRow}" data-export-header="VTS Postcode"                data-export-val="${rec.vts_postcode}" scope="row">${typeof rec.vts_postcode === 'undefined' ? '' : rec.vts_postcode}</td>
-                <td class="responsive-table__body__text responsive-table__body__text--types export-record data-launch-testing-station-view-record-click" data-export-row="${this.exportRow}" data-export-header="Full Garage Client"                data-export-val="${rec.is_garage_record}" scope="row">${typeof rec.is_garage_record === 'undefined' ? '' : (rec.is_garage_record === 1 ? 'Yes' : 'No' )}</td>
-            </tr>`
-            document.getElementById('data-launch-testing-station-table-body').insertAdjacentHTML('afterbegin', html);
-            // document.getElementById('data-launch-testing-station-table-body').innerHTML += html
     }
     generateRandomId () {
         const timestamp = new Date().getTime().toString(16); // Get current timestamp in hexadecimal
