@@ -425,6 +425,9 @@ class Garage {
         }
         document.getElementById(`garageMotCalibrationsDocumentsTableBody_${this.id}`).innerHTML = html
     }
+    navigateToTestingStationRecord (ev, id) {
+        changePage(ev, id, 'testingStation')  
+    }
    
     addListeners () {
         document.getElementById('garagePage').addEventListener('click', (event) => {
@@ -440,6 +443,13 @@ class Garage {
                     }        
                 }
                 this.openForm(true, rec)
+            }
+            else if (event.target.classList.contains('data-launch-testing-station-related-record-click')) {
+                console.log('clicked the related testing station record')
+                let id = event.target.attributes["data-launch-id"].value
+                if (id !== 'null') {
+                    this.navigateToTestingStationRecord(event, id)
+                } 
             }
 
             //// START OF MOT EQUIPMENT LISTENERS
@@ -2127,7 +2137,7 @@ class Garage {
                                     `
                                 }
                                 else {
-                                    html += `<text style='cursor: pointer; color: blue; font-weight: bold;' class='data-launch-garage-record-click data-launch-change-page' data-launch-menu-item="garage" id="garageRecordId" data-launch-id='${rec[fieldDataObj[key].fields[t].field]}'>Testing Station Record - ${rec[fieldDataObj[key].fields[t].field]}</text>`
+                                    html += `<text style='cursor: pointer; color: blue; font-weight: bold;' class='data-launch-testing-station-related-record-click data-launch-change-page' data-launch-menu-item="garage" id="garageRecordId" data-launch-id='${rec[fieldDataObj[key].fields[t].field]}'>Testing Station Record - ${rec[fieldDataObj[key].fields[t].field]}</text>`
                                 }
                                 html += `</div>`
                             }

@@ -70,34 +70,33 @@ function changePage(event, id, urlRedirectToPage) {
     console.log('desiredPage is ', desiredPage);
     let label = '';
     if (desiredPage === 'testingStation') {
+      label = 'Testing Stations'
       if (class_invoked_testingStation === false) {
-        console.log('the testing station has NOT !!!!  been instantiated YET !!!!')
         class_invoked_testingStation = true;
-        testingStationClassInstantiated = new TestingStation();
-        label = 'Testing Stations'
-      }
-      else {
-        console.log('the testing station has already been instantiated')
-        label = 'Testing Stations'
         if (id) {
-          testingStationClassInstantiated.openForm(true, id)
+          testingStationClassInstantiated = new TestingStation(id);
+        }
+        else {
+          testingStationClassInstantiated = new TestingStation();
+        }
+      }
+      else {        
+        if (id) {
+          testingStationClassInstantiated.openFormLaunchPad(true, id)
         }        
       }        
         // document.getElementById('data-launch-nav-menu-plus-icon').classList.add('data-launch-testing-stations-new-record')
     } else if (desiredPage === 'garage') {
+      label = 'Garages'
       if (class_invoked_garage === false) {
-        console.log('the garage has NOT !!!!  been instantiated YET !!!!')
         class_invoked_garage = true;
         if (id) {
           garageClassInstantiated = new Garage(id);
         } else {
           garageClassInstantiated = new Garage();
-        }
-        label = 'Garages'
+        }        
       }
       else {
-        console.log('the garage has already been instantiated')
-        label = 'Garages'
         if (id) {
           let rec;
           for (let i = 0; i < garageData.length; i++) {
@@ -113,17 +112,16 @@ function changePage(event, id, urlRedirectToPage) {
         // new GlobalOptionSet()
         // label = 'Option Sets'
     } else if (desiredPage === 'testerRecords') {
+      label = 'Testers'
       if (class_invoked_testers === false) {
         class_invoked_testers = true
-        label = 'Testers'
         if (id) {
           testersClassInstantiated = new Testers(id);
         } else {
           testersClassInstantiated = new Testers();
         }
       }
-      else {
-        label = 'Testers'
+      else {        
         if (id) {
           testersClassInstantiated.openForm(true, id)
         }        

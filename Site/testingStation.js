@@ -1,13 +1,25 @@
 class TestingStation {
-    constructor() {
-        console.log('testingStationData', testingStationData)     
-        this.data = []
+    constructor(id) {
+        console.log('testingStationData', testingStationData)
         this.filteredData = []
         this.filters = []
         // this.generateDummyData()
         this.data = testingStationData
         document.getElementById('data-launch-side-bar').classList.remove('data-launch-activate-menu')
-        this.renderHTMLHeader()
+        if (id) {
+            this.id = id
+            let rec;
+            for (let i = 0; i < this.data.length; i++) {
+                if (this.data[i].id === parseInt(id)) {
+                    rec = this.data[i]
+                }        
+            }
+            this.openForm(true, rec)
+            this.addListeners()
+        }
+        else {
+           this.renderHTMLHeader()
+        }
     }
     generateDummyData() {
         // Arrays of data
@@ -1702,6 +1714,16 @@ class TestingStation {
         }
         
         return html
+    }
+    openFormLaunchPad (bool, id) {
+        this.id = id
+        let rec;
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i].id === parseInt(id)) {
+                rec = this.data[i]
+            }        
+        }
+        this.openForm(true, rec)
     }
     openForm = (bool, rec) => {
         currentPage = 'Testing Station'
